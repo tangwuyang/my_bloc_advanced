@@ -1,0 +1,14 @@
+
+l10n:
+  # ARB 资源文件路径
+  arb_dir: lib/l10n
+  # 生成代码的输出路径
+  output_dir: lib/generated/l10n
+  # 默认 Locale（未匹配到其他 Locale 时使用）
+  default_locale: en
+  # 生成的类名（默认是 AppLocalizations）
+  class_name: S
+  # 是否生成常量构造函数
+  constant_constructor: true
+  # 是否生成类型安全的 getter 方法
+  nullable_getter: false

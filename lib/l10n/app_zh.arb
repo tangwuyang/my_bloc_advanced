@@ -1,0 +1,20 @@
+{
+  "@@locale": "zh",
+  "locale": "zh",
+  "title": "Görev Yönetim Sistemi",
+  "homeScreenTitle": "Ana Sayfa",
+  "loginScreenTitle": "Giriş Sayfası",
+  "settingsScreenTitle": "Ayarlar",
+  "accountScreenTitle": "Hesapım",
+  "tasksScreenTitle": "Görevler",
+  "taskSaveScreenTitle": "Görev Kaydet/Güncelle",
+  "drawerMenuHome": "Ana Sayfa",
+  "drawerSettingsTitle": "Ayarlar",
+  "drawerLogoutTitle": "Çıkış Yap",
+  "drawerTasks": "Görevler",
+  "pageSettingsTitle": "Settings",
+  "firstName": "Adı",
+  "taskPrice": "Fiyat",
+  "taskName": "Adı",
+  "save": "Kaydet"
+}
