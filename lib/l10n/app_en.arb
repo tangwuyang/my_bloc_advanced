@@ -1,22 +1,9 @@
 {
   "@@locale": "en",
   "locale": "en",
-  "title": "Task Management App",
-  "homeScreenTitle": "Home",
-  "loginScreenTitle": "Login",
-  "settingsScreenTitle": "Settings",
-  "accountScreenTitle": "Account",
-  "tasksScreenTitle": "Tasks",
-  "taskSaveScreenTitle": "Save or Update Task",
-  "drawerMenuHome": "Home",
-  "drawerSettingsTitle": "Settings",
-  "drawerLogoutTitle": "Logout",
-  "drawerTasks": "Tasks",
-  "pageSettingsTitle": "Settings",
-  "firstName": "First Name",
-  "taskPrice": "Task Price",
-  "taskName": "Task Name",
-  "save": "Save"
+  "login_user_name": "Username",
+  "login_password": "Password",
+  "login_button": "Login"
 
 
 }

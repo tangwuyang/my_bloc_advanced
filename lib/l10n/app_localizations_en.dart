@@ -12,50 +12,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locale => 'en';
 
   @override
-  String get title => 'Task Management App';
+  String get login_user_name => 'Username';
 
   @override
-  String get homeScreenTitle => 'Home';
+  String get login_password => 'Password';
 
   @override
-  String get loginScreenTitle => 'Login';
-
-  @override
-  String get settingsScreenTitle => 'Settings';
-
-  @override
-  String get accountScreenTitle => 'Account';
-
-  @override
-  String get tasksScreenTitle => 'Tasks';
-
-  @override
-  String get taskSaveScreenTitle => 'Save or Update Task';
-
-  @override
-  String get drawerMenuHome => 'Home';
-
-  @override
-  String get drawerSettingsTitle => 'Settings';
-
-  @override
-  String get drawerLogoutTitle => 'Logout';
-
-  @override
-  String get drawerTasks => 'Tasks';
-
-  @override
-  String get pageSettingsTitle => 'Settings';
-
-  @override
-  String get firstName => 'First Name';
-
-  @override
-  String get taskPrice => 'Task Price';
-
-  @override
-  String get taskName => 'Task Name';
-
-  @override
-  String get save => 'Save';
+  String get login_button => 'Login';
 }

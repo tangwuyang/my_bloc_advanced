@@ -12,50 +12,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get locale => 'zh';
 
   @override
-  String get title => 'Görev Yönetim Sistemi';
+  String get login_user_name => 'Username';
 
   @override
-  String get homeScreenTitle => 'Ana Sayfa';
+  String get login_password => 'Password';
 
   @override
-  String get loginScreenTitle => 'Giriş Sayfası';
-
-  @override
-  String get settingsScreenTitle => 'Ayarlar';
-
-  @override
-  String get accountScreenTitle => 'Hesapım';
-
-  @override
-  String get tasksScreenTitle => 'Görevler';
-
-  @override
-  String get taskSaveScreenTitle => 'Görev Kaydet/Güncelle';
-
-  @override
-  String get drawerMenuHome => 'Ana Sayfa';
-
-  @override
-  String get drawerSettingsTitle => 'Ayarlar';
-
-  @override
-  String get drawerLogoutTitle => 'Çıkış Yap';
-
-  @override
-  String get drawerTasks => 'Görevler';
-
-  @override
-  String get pageSettingsTitle => 'Settings';
-
-  @override
-  String get firstName => 'Adı';
-
-  @override
-  String get taskPrice => 'Fiyat';
-
-  @override
-  String get taskName => 'Adı';
-
-  @override
-  String get save => 'Kaydet';
+  String get login_button => 'Login';
 }

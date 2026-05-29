@@ -12,50 +12,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get locale => 'fr';
 
   @override
-  String get title => 'Application de gestion des tâches';
+  String get login_user_name => 'Username';
 
   @override
-  String get homeScreenTitle => 'Tâches';
+  String get login_password => 'Password';
 
   @override
-  String get loginScreenTitle => 'Connexion';
-
-  @override
-  String get settingsScreenTitle => 'Paramètres';
-
-  @override
-  String get accountScreenTitle => 'Compte';
-
-  @override
-  String get tasksScreenTitle => 'Tâches';
-
-  @override
-  String get taskSaveScreenTitle => 'Enregistrer une tâche';
-
-  @override
-  String get drawerMenuHome => 'Accueil';
-
-  @override
-  String get drawerSettingsTitle => 'Paramètres';
-
-  @override
-  String get drawerLogoutTitle => 'Déconnexion';
-
-  @override
-  String get drawerTasks => 'Tâches';
-
-  @override
-  String get pageSettingsTitle => '';
-
-  @override
-  String get firstName => '';
-
-  @override
-  String get taskPrice => '';
-
-  @override
-  String get taskName => '';
-
-  @override
-  String get save => '';
+  String get login_button => 'Login';
 }

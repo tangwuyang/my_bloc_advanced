@@ -105,101 +105,23 @@ abstract class AppLocalizations {
   /// **'en'**
   String get locale;
 
-  /// No description provided for @title.
+  /// No description provided for @login_user_name.
   ///
   /// In en, this message translates to:
-  /// **'Task Management App'**
-  String get title;
+  /// **'Username'**
+  String get login_user_name;
 
-  /// No description provided for @homeScreenTitle.
+  /// No description provided for @login_password.
   ///
   /// In en, this message translates to:
-  /// **'Home'**
-  String get homeScreenTitle;
+  /// **'Password'**
+  String get login_password;
 
-  /// No description provided for @loginScreenTitle.
+  /// No description provided for @login_button.
   ///
   /// In en, this message translates to:
   /// **'Login'**
-  String get loginScreenTitle;
-
-  /// No description provided for @settingsScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settingsScreenTitle;
-
-  /// No description provided for @accountScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Account'**
-  String get accountScreenTitle;
-
-  /// No description provided for @tasksScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Tasks'**
-  String get tasksScreenTitle;
-
-  /// No description provided for @taskSaveScreenTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Save or Update Task'**
-  String get taskSaveScreenTitle;
-
-  /// No description provided for @drawerMenuHome.
-  ///
-  /// In en, this message translates to:
-  /// **'Home'**
-  String get drawerMenuHome;
-
-  /// No description provided for @drawerSettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get drawerSettingsTitle;
-
-  /// No description provided for @drawerLogoutTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Logout'**
-  String get drawerLogoutTitle;
-
-  /// No description provided for @drawerTasks.
-  ///
-  /// In en, this message translates to:
-  /// **'Tasks'**
-  String get drawerTasks;
-
-  /// No description provided for @pageSettingsTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get pageSettingsTitle;
-
-  /// No description provided for @firstName.
-  ///
-  /// In en, this message translates to:
-  /// **'First Name'**
-  String get firstName;
-
-  /// No description provided for @taskPrice.
-  ///
-  /// In en, this message translates to:
-  /// **'Task Price'**
-  String get taskPrice;
-
-  /// No description provided for @taskName.
-  ///
-  /// In en, this message translates to:
-  /// **'Task Name'**
-  String get taskName;
-
-  /// No description provided for @save.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get save;
+  String get login_button;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
