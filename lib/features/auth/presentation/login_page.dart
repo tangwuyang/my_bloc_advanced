@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:my_bloc_advanced/features/auth/application/login_bloc.dart';
+import 'package:my_bloc_advanced/features/auth/application/login_state.dart';
 import 'package:my_bloc_advanced/l10n/app_localizations.dart';
 
 import '../../../core/testing/app_key_constants.dart';
+import '../application/login_event.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -183,14 +187,29 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Widget? _submitButton(BuildContext context) {
-    return FilledButton(
-      onPressed: () {
-        _trySubmit(context);
+    return BlocBuilder<LoginBloc, LoginState>(
+      buildWhen: (previous, current) =>
+          previous.runtimeType != current.runtimeType,
+      builder: (context, state) {
+        final isLoading = state is LoginLoadingState;
+
+        return FilledButton(
+          onPressed: isLoading ? null : () => _trySubmit(context),
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(Colors.black),
+          ),
+          child: isLoading
+              ? SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                )
+              : Text(AppLocalizations.of(context)!.login_button),
+        );
       },
-      child: Text(AppLocalizations.of(context)!.login_button),
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(Colors.black),
-      ),
     );
   }
 
@@ -198,25 +217,46 @@ class _LoginScreenState extends State<LoginScreen>
     if (_loginFormKey.currentState?.saveAndValidate() ?? false) {
       final username = _loginFormKey.currentState?.value['username'];
       final password = _loginFormKey.currentState?.value['password'];
+      context.read<LoginBloc>().add(LoginFormSubmitted(username: username, password: password));
     }
   }
 
   _passwordField(BuildContext context) {
-    return FormBuilderTextField(
-      key: loginTextFieldPasswordKey,
-      name: 'password',
-      decoration: InputDecoration(
-        hintText: '********',
-
-      ),
-      textInputAction: TextInputAction.done,
-      onSubmitted: (_) => _trySubmit(context),
-
-      validator: FormBuilderValidators.compose([
-        FormBuilderValidators.required(errorText: "required_field"),
-        FormBuilderValidators.minLength(4, errorText: "password_min_length"),
-        FormBuilderValidators.maxLength(20, errorText: "password_max_length"),
-      ]),
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return FormBuilderTextField(
+          key: loginTextFieldPasswordKey,
+          name: 'password',
+          decoration: InputDecoration(
+            hintText: '********',
+            suffixIcon: IconButton(
+              onPressed: () =>
+                  context.read<LoginBloc>().add(TogglePasswordVisibility()),
+              //   BlocProvider.of<LoginBloc>(context).add(TogglePasswordVisibility()),
+              icon: Icon(
+                state.passwordVisible
+                    ? Icons.visibility_outlined
+                    : Icons.visibility_off_outlined,
+                size: 18,
+              ),
+            ),
+          ),
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => _trySubmit(context),
+          obscureText: state.passwordVisible ? true : false,
+          validator: FormBuilderValidators.compose([
+            FormBuilderValidators.required(errorText: "required_field"),
+            FormBuilderValidators.minLength(
+              4,
+              errorText: "password_min_length",
+            ),
+            FormBuilderValidators.maxLength(
+              20,
+              errorText: "password_max_length",
+            ),
+          ]),
+        );
+      },
     );
   }
 }
