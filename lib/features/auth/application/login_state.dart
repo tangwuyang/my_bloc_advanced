@@ -29,6 +29,15 @@ final class LoginLoadingState extends LoginState{
 
 }
 
+final class LoginLoadedState extends LoginState {
+  const LoginLoadedState({this.username, super.loginMethod, super.passwordVisible});
+
+  final String? username;
+
+  @override
+  List<Object?> get props => [username, loginMethod, passwordVisible];
+}
+
 final class LoginErrorState extends LoginState {
   const LoginErrorState({required this.errorCode, this.message, super.loginMethod, super.passwordVisible});
 

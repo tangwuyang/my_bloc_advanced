@@ -1,7 +1,10 @@
 
 import 'package:dio/dio.dart';
 
+import '../../core/errors/app_api_exception.dart';
 import '../../core/logging/app_logger.dart';
+import 'interceptors/mock_interceptor.dart';
+import 'interceptors/token_refresh_interceptor.dart';
 
 /// Metadata describing one entry in the [ApiClient] interceptor chain.
 ///
@@ -55,4 +58,119 @@ class ApiClient{
   /// Set this before the first API call (typically in app initialization) so
   /// that the [TokenRefreshInterceptor] can notify the app layer to log out.
   static OnSessionExpired? onSessionExpired;
+
+  /// The active Dio instance.
+  static Dio get instance {
+    if (_testDio != null) return _testDio!;
+    return _dio ??= _createDio();
+  }
+
+  static Dio _createDio(){
+
+    final dio = Dio(
+      BaseOptions(
+        baseUrl:  '',
+        connectTimeout: const Duration(seconds: _timeoutSeconds),
+        receiveTimeout: const Duration(seconds: _timeoutSeconds),
+        responseType: ResponseType.plain,
+        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+      ),
+    );
+
+    final chain = <({Interceptor interceptor, InterceptorChainEntry meta})>[
+      (
+      interceptor: MockInterceptor(),
+      meta: const InterceptorChainEntry(
+        name: 'MockInterceptor',
+        active: false,
+        detail: 'Serves mock data in dev/test',
+      ),
+      )
+    ];
+    dio.interceptors.addAll(chain.map((e) => e.interceptor));
+    return dio;
+  }
+
+
+
+  static Future<Response<String>> post<T>(
+      String path,
+      T data, {
+        Map<String, String>? headers,
+        String? contentType,
+        String? pathParams,
+      }) async {
+    final fullPath = pathParams != null ? '$path/$pathParams' : path;
+    final serialized = _serializeData(data);
+    final options = Options(
+      extra: {'_basePath': path, '_pathParams': pathParams},
+      headers: headers,
+      contentType: contentType,
+    );
+    try {
+      return await instance.post<String>(fullPath, data: serialized, options: options);
+    } on DioException catch (e) {
+      throw _mapDioException(e);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Error mapping — converts DioException to AppException hierarchy
+  // ---------------------------------------------------------------------------
+
+  static AppException _mapDioException(DioException e) {
+    // If the wrapped error is already an AppException (e.g. from MockInterceptor),
+    // unwrap and rethrow it directly.
+    if (e.error is AppException) return e.error as AppException;
+
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return FetchDataException('TimeoutException');
+      case DioExceptionType.connectionError:
+        return FetchDataException('No Internet connection');
+      case DioExceptionType.badResponse:
+        return _mapBadResponse(e);
+      case DioExceptionType.cancel:
+        return FetchDataException('Request cancelled');
+      case DioExceptionType.badCertificate:
+        return FetchDataException('Bad certificate');
+      case DioExceptionType.unknown:
+        return _mapUnknown(e);
+    }
+  }
+
+  static AppException _mapBadResponse(DioException e) {
+    final statusCode = e.response?.statusCode ?? 0;
+    final body = e.response?.data?.toString() ?? '';
+    switch (statusCode) {
+      case 400:
+        return BadRequestException(body);
+      case 401:
+        return UnauthorizedException(body);
+      case 403:
+        return UnauthorizedException(body);
+      case 404:
+        return FetchDataException('Not found: $body');
+      case >= 500:
+        return FetchDataException('Server error ($statusCode): $body');
+      default:
+        return FetchDataException('HTTP $statusCode: $body');
+    }
+  }
+
+  static AppException _mapUnknown(DioException e) {
+    final message = e.error?.toString() ?? e.message ?? 'Unknown error';
+    if (message.contains('SocketException')) return FetchDataException('No Internet connection');
+    if (message.contains('Timeout') || message.contains('timeout')) return FetchDataException('TimeoutException');
+    return FetchDataException(message);
+  }
+
+  /// Serialize [data] for Dio: Maps/Strings/Lists pass through; objects call `toJson()`.
+  static dynamic _serializeData<T>(T data) {
+    if (data is Map || data is String || data is List) return data;
+    return (data as dynamic).toJson();
+  }
+
 }
