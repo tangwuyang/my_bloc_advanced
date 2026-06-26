@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_bloc_advanced/features/auth/application/login_bloc.dart';
 import 'package:my_bloc_advanced/features/auth/application/login_state.dart';
 import 'package:my_bloc_advanced/l10n/app_localizations.dart';
 
+import '../../../app/router/app_routes_constants.dart';
 import '../../../core/testing/app_key_constants.dart';
 import '../application/login_event.dart';
 
@@ -45,17 +47,57 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isDesktop = constraints.maxWidth >= 675;
-            print(constraints.maxWidth);
-            print('m ${MediaQuery.of(context).size.width}');
-            return isDesktop ? _desktopLayout(context) : _mobileLayout(context);
-          },
+      key: _scaffoldKey,
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: _onLoginStateChange,
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isDesktop = constraints.maxWidth >= 675;
+              print(constraints.maxWidth);
+              print('m ${MediaQuery.of(context).size.width}');
+              return isDesktop
+                  ? _desktopLayout(context)
+                  : _mobileLayout(context);
+            },
+          ),
         ),
       ),
     );
+  }
+
+  void _onLoginStateChange(BuildContext context, LoginState state) {
+    if (state is LoginLoadingState) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(AppLocalizations.of(context)!.login),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          width: MediaQuery.of(context).size.width * 0.8,
+        ),
+      );
+    } else if (state is LoginLoadedState) {
+      context.go(ApplicationRoutesConstants.home);
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).hideCurrentSnackBar();
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('请求成功'),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          width: MediaQuery.of(context).size.width * 0.8,
+        ),
+      );
+    } else if (state is LoginErrorState) {
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).hideCurrentSnackBar();
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text('请求失败'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          width: MediaQuery.of(context).size.width * 0.8,
+        ),
+      );
+    }
   }
 
   _desktopLayout(BuildContext context) {
@@ -217,7 +259,9 @@ class _LoginScreenState extends State<LoginScreen>
     if (_loginFormKey.currentState?.saveAndValidate() ?? false) {
       final username = _loginFormKey.currentState?.value['username'];
       final password = _loginFormKey.currentState?.value['password'];
-      context.read<LoginBloc>().add(LoginFormSubmitted(username: username, password: password));
+      context.read<LoginBloc>().add(
+        LoginFormSubmitted(username: username, password: password),
+      );
     }
   }
 

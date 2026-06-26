@@ -19,4 +19,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get login_button => 'Login';
+
+  @override
+  String get login => 'Login';
 }

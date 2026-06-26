@@ -3,7 +3,6 @@
   "locale": "en",
   "login_user_name": "Username",
   "login_password": "Password",
-  "login_button": "Login"
-
-
+  "login_button": "Login",
+  "login": "Login"
 }
