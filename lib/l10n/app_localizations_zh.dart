@@ -12,14 +12,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get locale => 'zh';
 
   @override
-  String get login_user_name => 'Username';
+  String get login_user_name => '用户名';
 
   @override
-  String get login_password => 'Password';
+  String get login_password => '密码';
 
   @override
-  String get login_button => 'Login';
+  String get login_button => '登陆';
 
   @override
-  String get login => 'Login';
+  String get login => '登陆';
 }

@@ -7,7 +7,6 @@ import 'package:my_bloc_advanced/demo/bloc/couter_bloc.dart';
 import 'package:my_bloc_advanced/demo/bloc/my_bloc.dart';
 import 'package:my_bloc_advanced/demo/bloc/user_bloc.dart';
 import 'package:my_bloc_advanced/features/auth/presentation/login_page.dart';
-import 'package:my_bloc_advanced/generated/l10n.dart';
 import 'package:my_bloc_advanced/l10n/app_localizations.dart';
 import 'package:my_bloc_advanced/shared/design_system/theme/app_theme.dart';
 import 'package:my_bloc_advanced/shared/design_system/theme/app_theme_palette.dart';

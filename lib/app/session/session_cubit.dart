@@ -9,8 +9,8 @@ class SessionCubit extends Cubit<SessionState> {
 
   static final _log = AppLogger.getLogger('SessionCubit');
 
-  SessionCubit(super.initialState, {ISecureStorage? secureStorage})
-      :_secureStorage = secureStorage ?? FlutterSecureStorageAdapter();
+  SessionCubit( {ISecureStorage? secureStorage})
+      :_secureStorage = secureStorage ?? FlutterSecureStorageAdapter(), super(SessionUnknown());
 
   final ISecureStorage _secureStorage;
 
@@ -53,7 +53,6 @@ class SessionCubit extends Cubit<SessionState> {
 
 class SessionState extends Equatable {
   const SessionState();
-
   @override
   List<Object?> get props => const [];
 }

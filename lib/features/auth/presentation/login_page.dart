@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_bloc_advanced/app/theme/theme_bloc.dart';
 import 'package:my_bloc_advanced/features/auth/application/login_bloc.dart';
 import 'package:my_bloc_advanced/features/auth/application/login_state.dart';
 import 'package:my_bloc_advanced/l10n/app_localizations.dart';
 
 import '../../../app/router/app_routes_constants.dart';
+import '../../../core/logging/app_logger.dart';
 import '../../../core/testing/app_key_constants.dart';
 import '../application/login_event.dart';
 
@@ -28,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen>
     debugLabel: '__loginScaffoldKey__',
   );
 
+  static final _log = AppLogger.getLogger("_LoginScreenState");
   @override
   void initState() {
     super.initState();
@@ -46,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    _log.info('build {}',[isDark]);
     return Scaffold(
       key: _scaffoldKey,
       body: BlocListener<LoginBloc, LoginState>(
@@ -57,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen>
               print(constraints.maxWidth);
               print('m ${MediaQuery.of(context).size.width}');
               return isDesktop
-                  ? _desktopLayout(context)
+                  ? _desktopLayout(context,isDark)
                   : _mobileLayout(context);
             },
           ),
@@ -100,11 +105,11 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  _desktopLayout(BuildContext context) {
+  _desktopLayout(BuildContext context, bool isDark) {
     return Row(
       children: [
         Expanded(flex: 55, child: Text("introduction")),
-        Expanded(flex: 45, child: _formPanel()),
+        Expanded(flex: 45, child: _formPanel(isDark)),
       ],
     );
   }
@@ -113,8 +118,10 @@ class _LoginScreenState extends State<LoginScreen>
     return Text("mobile");
   }
 
-  Widget _formPanel() {
+  Widget _formPanel(bool isDark) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
+      color: cs.surface,
       child: Stack(
         children: [
           Center(
@@ -139,17 +146,20 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
+          Positioned(top:16,right:16,child: _themeBadge(isDark))
         ],
       ),
     );
   }
 
-  _brandIcon() {
+  _brandIcon({bool isDark = false}) {
     final cs = Theme.of(context).colorScheme;
+
     return Container(
       width: 44,
       height: 44,
       decoration: BoxDecoration(
+        color: isDark?cs.surfaceContainerHighest:cs.primaryContainer,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: cs.outlineVariant),
       ),
@@ -164,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen>
       crossAxisAlignment: .start,
       children: [
         Text(
-          "Welcome back",
+          AppLocalizations.of(context)!.login_user_name,
           style: tt.headlineMedium?.copyWith(
             fontWeight: FontWeight.w700,
             letterSpacing: -0.8,
@@ -301,6 +311,28 @@ class _LoginScreenState extends State<LoginScreen>
           ]),
         );
       },
+    );
+  }
+
+  Widget _themeBadge(bool isDark) {
+    final cs = Theme.of(context).colorScheme;
+    return BlocBuilder<ThemeBloc,ThemeState>(
+      builder: (BuildContext context, ThemeState state) {
+        return GestureDetector(
+          onTap: (){context.read<ThemeBloc>().add(const ToggleBrightness());},
+          child: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+                color: cs.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: cs.outlineVariant)
+            ),
+            child: Icon(isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined, size: 18, color: cs.onSurfaceVariant),
+          ),
+        );
+      },
+
     );
   }
 }
